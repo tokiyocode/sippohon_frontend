@@ -72,9 +72,12 @@ class TPAForm extends Form {
 
     redirect() {
         const { location, navigate } = this.props;
-        const { from: previousPage } = location.state;
+        let url = "/tempatPembuanganAkhir";
+        const { state } = location;
+        if (state && state.from)
+            url = state.from;
 
-        return navigate(previousPage, {
+        return navigate(url, {
             replace: true,
             state: {
                 formType: this.getTypeOfForm()

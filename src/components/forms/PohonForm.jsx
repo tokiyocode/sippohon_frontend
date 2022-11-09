@@ -92,8 +92,13 @@ class PohonForm extends Form {
     }
 
     redirect() {
-        const {from: previousPage} = this.props.location.state;
-        return this.props.navigate(previousPage, {replace: true, state: {formType: this.getTypeOfForm()}});
+        const { navigate, location } = this.props;
+        let url = "/pohon";
+        const { state } = location;
+        if (state && state.from)
+            url = state.from;
+
+        return navigate(url, {replace: true, state: {formType: this.getTypeOfForm()}});
     }
 
     doSubmit = async () => {

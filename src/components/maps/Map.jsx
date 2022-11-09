@@ -109,7 +109,7 @@ class Map extends Component {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <LayersControl position="topright">
+        <LayersControl position="topleft">
           <LayersControl.Overlay checked name="Pohon">
             <LayerGroup>
               <PohonMarker data={allPohon} iconSize={iconSize} isUserAuthenticated={isAuthenticated} />

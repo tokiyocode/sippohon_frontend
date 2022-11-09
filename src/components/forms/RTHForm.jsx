@@ -111,6 +111,29 @@ class RTHForm extends Form {
         return this.props.params._id === id;
     }
 
+    getTypeOfForm() {
+        const { data } = this.state;
+        if (data._id)
+            return "Form Update";
+
+        return "Form Create";
+    }
+
+    redirect() {
+        const { location, navigate } = this.props;
+        let url = "/ruangTerbukaHijau";
+        const { state } = location;
+        if (state && state.from)
+            url = location.state.from;
+
+        return navigate(url, {
+            replace: true,
+            state: {
+                formType: this.getTypeOfForm()
+            }
+        })
+    }
+
     doSubmit = async () => {
         const {data, errors} = this.state;
 
@@ -128,13 +151,9 @@ class RTHForm extends Form {
             return;
         }
 
-        const {location, navigate} = this.props;
-        const {state} = location;
-        const {data: savedRTH} = await saveRTH(data);
-        if (this.isUpdateForm(savedRTH._id))
-            return navigate(state.from, {replace: true, state: {fromRTHForm: true, formType: "Form Update"}});
+        await saveRTH(data);
 
-        return navigate(state.from, {replace: true, state: {fromRTHForm: true, formType: "Form Create"}});        
+        this.redirect();
     }
 
     render() {

@@ -12,7 +12,7 @@ const MapSearchControl = ({onSearch}) => {
         const searchControl = new GeoSearchControl({
             provider,
             style: "bar",
-            searchLabel: "Cari...",
+            searchLabel: "Filter...",
             showMarker: false,
         });
 
