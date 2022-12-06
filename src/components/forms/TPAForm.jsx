@@ -13,7 +13,8 @@ class TPAForm extends Form {
             lat: "",
             lon: "",
             alamat: "",
-            kecamatanId: ""
+            kecamatanId: "",
+            foto: ""
         },
         errors: {},
         kecamatan: []
@@ -33,7 +34,8 @@ class TPAForm extends Form {
         }),
         kecamatanId: Joi.string().required().messages({
             "string.empty": "kecamatan tidak boleh kosong"
-        })
+        }),
+        foto: Joi.object()
     }
 
     async componentDidMount() {
@@ -111,11 +113,16 @@ class TPAForm extends Form {
                             <div className="col-12">
                                 <div className="card">
                                     <div className="card-body">
-                                        <form onSubmit={(e) => this.handleSubmit(e)} autoComplete="off">
+                                        <form 
+                                            onSubmit={(e) => this.handleSubmit(e)} 
+                                            autoComplete="off"
+                                            encType="multipart/form-data"
+                                        >
                                             {this.renderInput("lat", "Latitude", "number", true)}
                                             {this.renderInput("lon", "Longitude", "number")}
                                             {this.renderTextArea("alamat", "Alamat")}
                                             {this.renderSelection("kecamatanId", "Kecamatan", kecamatan, "_id", "nama", data["kecamatanId"])}
+                                            {this.renderFileInput("foto", "Foto (Landscape)")}
                                             {this.renderPrimaryButton("Simpan")}
                                             <div className="form-group btn">
                                                 <div className="col-sm-12 mt-4">

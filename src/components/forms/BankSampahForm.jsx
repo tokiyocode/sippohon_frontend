@@ -14,7 +14,8 @@ class BankSampahForm extends Form {
             alamat: "",
             lat: "",
             lon: "",
-            kecamatanId: ""
+            kecamatanId: "",
+            foto: ""
         },
         errors: {},
         kecamatan: []
@@ -39,7 +40,8 @@ class BankSampahForm extends Form {
         }),
         kecamatanId: Joi.string().required().messages({
             "string.empty": "kecamatan tidak boleh kosong"
-        })
+        }),
+        foto: Joi.object()
     };
 
     async componentDidMount() {
@@ -116,12 +118,17 @@ class BankSampahForm extends Form {
                             <div className="col-12">
                                 <div className="card">
                                     <div className="card-body">
-                                        <form onSubmit={(e) => this.handleSubmit(e)} autoComplete="off">
+                                        <form 
+                                            onSubmit={(e) => this.handleSubmit(e)} 
+                                            autoComplete="off" 
+                                            encType="multipart/form-data"
+                                        >
                                             {this.renderInput("nama", "Nama", "text", true)}
                                             {this.renderTextArea("alamat", "Alamat")}
                                             {this.renderInput("lat", "Latitude", "number")}
                                             {this.renderInput("lon", "Longitude", "number")}
                                             {this.renderSelection("kecamatanId", "Kecamatan", kecamatan, "_id", "nama", data["kecamatanId"])}
+                                            {this.renderFileInput("foto", "Foto (Landscape)")}
                                             {this.renderPrimaryButton("Simpan")}
                                             <div className="form-group btn">
                                                 <div className="col-sm-12 mt-4">

@@ -15,12 +15,40 @@ class RTHForm extends Form {
             alamat: "",
             lats: [],
             lons: [],
-            kecamatanId: ""
+            kecamatanId: "",
+            foto: ""
         },
         errors: {},
         kecamatan: [],
         latInputs: [{id: uuidv4()}],
         lonInputs: [{id: uuidv4()}]
+    };
+
+    schema = {
+        _id: Joi.string(),
+        nama: Joi.string().min(3).max(255).required().messages({
+            "string.empty": "nama tidak boleh kosong",
+            "string.min": "nama setidaknya memiliki panjang 3 character",
+            "string.max": "nama tidak boleh memiliki panjang lebih dari 255 character"
+        }),
+        alamat: Joi.string().min(3).required().messages({
+            "string.empty": "alamat tidak boleh kosong",
+            "string.min": "alamat setidaknya memiliki panjang 3 character"
+        }),
+        lats: Joi.array().items(
+            Joi.number().required().messages({ "number.unsafe": "angka yang dimasukkan tidak valid sebagai latitudes"})
+            ).required().messages({
+            "array.includesRequiredUnknowns": "latitudes tidak boleh kosong"
+        }),
+        lons: Joi.array().items(
+                Joi.number().required().messages({ "number.unsafe": "angka yang dimasukkan tidak valid sebagai longitudes"})
+            ).required().messages({
+            "array.includesRequiredUnknowns": "longitudes tidak boleh kosong"
+        }),
+        kecamatanId: Joi.string().required().messages({
+            "string.empty": "kecamatan tidak boleh kosong"
+        }),
+        foto: Joi.object()
     };
 
     async componentDidMount() {
@@ -65,32 +93,6 @@ class RTHForm extends Form {
         
         return value;
     }
-
-    schema = {
-        _id: Joi.string(),
-        nama: Joi.string().min(3).max(255).required().messages({
-            "string.empty": "nama tidak boleh kosong",
-            "string.min": "nama setidaknya memiliki panjang 3 character",
-            "string.max": "nama tidak boleh memiliki panjang lebih dari 255 character"
-        }),
-        alamat: Joi.string().min(3).required().messages({
-            "string.empty": "alamat tidak boleh kosong",
-            "string.min": "alamat setidaknya memiliki panjang 3 character"
-        }),
-        lats: Joi.array().items(
-            Joi.number().required().messages({ "number.unsafe": "angka yang dimasukkan tidak valid sebagai latitudes"})
-            ).required().messages({
-            "array.includesRequiredUnknowns": "latitudes tidak boleh kosong"
-        }),
-        lons: Joi.array().items(
-                Joi.number().required().messages({ "number.unsafe": "angka yang dimasukkan tidak valid sebagai longitudes"})
-            ).required().messages({
-            "array.includesRequiredUnknowns": "longitudes tidak boleh kosong"
-        }),
-        kecamatanId: Joi.string().required().messages({
-            "string.empty": "kecamatan tidak boleh kosong"
-        })
-    };
 
     // I decided to create this function because the validation logic cannot be achieved using current version of joi
     latsLongsCustomValidation = () => {
@@ -176,12 +178,17 @@ class RTHForm extends Form {
                             <div className="col-12">
                                 <div className="card">
                                     <div className="card-body">
-                                        <form onSubmit={(e) => this.handleSubmit(e)} autoComplete={"off"}>
+                                        <form 
+                                            onSubmit={(e) => this.handleSubmit(e)} 
+                                            autoComplete={"off"}
+                                            encType="multipart/form-data"
+                                        >
                                             {this.renderInput("nama", "Nama", "text", true)}
                                             {this.renderTextArea("alamat", "Alamat")}
                                             {this.renderMultipleInputs("lats", "Latitudes", "latInputs", "number")}
                                             {this.renderMultipleInputs("lons", "Longitudes", "lonInputs", "number")}
                                             {this.renderSelection("kecamatanId", "Kecamatan", kecamatan, "_id", "nama", data["kecamatanId"])}
+                                            {this.renderFileInput("foto", "Foto (Landscape)")}
                                             {this.renderPrimaryButton("Simpan")}
                                             <div className="form-group btn">
                                                 <div className="col-sm-12 mt-4">

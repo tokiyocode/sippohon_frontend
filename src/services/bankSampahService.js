@@ -1,8 +1,7 @@
 import http from "./httpService";
 import config from "../config.json";
 
-const {apiUrl} = config;
-const apiEndPoint = apiUrl + '/bankSampah';
+const apiEndPoint = config.apiUrl + '/bankSampah';
 
 export function getAllBankSampah() {
     return http.get(apiEndPoint);
@@ -16,10 +15,10 @@ export function saveBankSampah(bankSampah) {
     if (bankSampah._id) {
         const data = {...bankSampah};
         delete data._id;
-        return http.put(`${apiEndPoint}/${bankSampah._id}`, data);
+        return http.put(`${apiEndPoint}/${bankSampah._id}`, data, config.service);
     }
 
-    return http.post(apiEndPoint, bankSampah);
+    return http.post(apiEndPoint, bankSampah, config.service);
 }
 
 export function deleteBankSampah(id) {

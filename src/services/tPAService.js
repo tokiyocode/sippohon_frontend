@@ -1,8 +1,7 @@
 import http from "./httpService";
 import config from "../config.json";
 
-const {apiUrl} = config;
-const apiEndPoint = apiUrl + "/tempatPembuanganAkhir";
+const apiEndPoint = config.apiUrl + "/tempatPembuanganAkhir";
 
 export function getAllTPA() {
     return http.get(apiEndPoint);
@@ -16,10 +15,10 @@ export function saveTPA(tpa) {
     if (tpa._id) {
         const data = {...tpa};
         delete data._id;
-        return http.put(`${apiEndPoint}/${tpa._id}`, data);
+        return http.put(`${apiEndPoint}/${tpa._id}`, data, config.service);
     }
 
-    return http.post(apiEndPoint, tpa);
+    return http.post(apiEndPoint, tpa, config.service);
 }
 
 export function deleteTPA(id) {

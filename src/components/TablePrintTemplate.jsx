@@ -28,7 +28,7 @@ const TablePrintTemplate = forwardRef(({columns, data}, ref) => {
                                         {pagedData.map(item =>(
                                             <tr key={item._id}>
                                                 <td>{num++}</td>
-                                                {columns.map(column => <td>{_.get(item, column.path)}</td>)}
+                                                {columns.map(column => <td key={column.path}>{_.get(item, column.path)}</td>)}
                                             </tr>
                                         ))}
                                     </tbody>

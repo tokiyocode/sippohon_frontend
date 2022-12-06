@@ -1,3 +1,8 @@
 {
-    "apiUrl": "https://api.sippohon.singkawangkota.go.id"
+    "apiUrl": "http://localhost:3900",
+    "service": {
+        "headers": {
+            "Content-Type": "multipart/form-data"
+        }
+    }
 }

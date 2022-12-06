@@ -1,8 +1,7 @@
 import http from './httpService';
 import config from '../config.json';
 
-const {apiUrl} = config;
-const apiEndpoint = apiUrl + '/tempatPembuanganSampah';
+const apiEndpoint = config.apiUrl + '/tempatPembuanganSampah';
 
 export function getAllTPS() {
     return http.get(apiEndpoint);
@@ -16,10 +15,10 @@ export function saveTPS(tps) {
     if (tps._id) {
         const data = {...tps};
         delete data._id;
-        return http.put(`${apiEndpoint}/${tps._id}`, data);
+        return http.put(`${apiEndpoint}/${tps._id}`, data, config.service);
     }
 
-    return http.post(apiEndpoint, tps);
+    return http.post(apiEndpoint, tps, config.service);
 }
 
 export function deleteTPS(id) {

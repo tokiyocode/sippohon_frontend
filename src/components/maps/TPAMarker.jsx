@@ -1,4 +1,5 @@
 import React from "react";
+import { Buffer } from "buffer";
 import { Marker, Popup } from "react-leaflet";
 import { NavLink, useLocation } from "react-router-dom";
 import getMarkerIcon from "../../utils/getMarkerIcon";
@@ -6,30 +7,36 @@ import getMarkerIcon from "../../utils/getMarkerIcon";
 const TPAMarker = ({data, iconSize, isUserAuthenticated}) => {
     const location = useLocation();
     
-    return data.map(tpa => (
-        <Marker
-            key={tpa._id}
-            position={[tpa.lat, tpa.lon]}
-            autoPanOnFocus={false}
-            icon={getMarkerIcon(iconSize, require("../../assets/icons/landfill.png"))}
-        >
-            <Popup>
-                <span className="marker-popup-title">Tempat Pembuangan Akhir</span><br />
-                Alamat: {tpa.alamat}<br />
-                Latitude: {tpa.lat}<br />
-                Longitude: {tpa.lon}<br />
-                Kecamatan: {tpa.kecamatan.nama}<br />
-                {isUserAuthenticated && 
-                <NavLink to={`/tempatPembuanganAkhir/${tpa._id}`} state={{from: location.pathname}} >
-                    <div className="popup-btn-edit">
-                        <button className="btn btn-primary text-white">
-                            <i className="mdi mdi-grease-pencil" />
-                        </button>
-                    </div>
-                </NavLink>}
-            </Popup>
-        </Marker>
-    ));
+    return data.map(tpa => {
+        const { foto } = tpa;
+        const fotoBase64Str = foto ? Buffer.from(foto.data).toString("base64") : null;
+
+        return (
+            <Marker
+                key={tpa._id}
+                position={[tpa.lat, tpa.lon]}
+                autoPanOnFocus={false}
+                icon={getMarkerIcon(iconSize, require("../../assets/icons/landfill.png"))}
+            >
+                <Popup>
+                    <span className="marker-popup-title">Tempat Pembuangan Akhir</span><br />
+                    Alamat: {tpa.alamat}<br />
+                    Latitude: {tpa.lat}<br />
+                    Longitude: {tpa.lon}<br />
+                    Kecamatan: {tpa.kecamatan.nama}<br />
+                    {fotoBase64Str && <img className="marker-image" src={`data:${foto.contentType};base64,${fotoBase64Str}`} />}
+                    {isUserAuthenticated && 
+                    <NavLink to={`/tempatPembuanganAkhir/${tpa._id}`} state={{from: location.pathname}} >
+                        <div className="popup-btn-edit">
+                            <button className="btn btn-primary text-white">
+                                <i className="mdi mdi-grease-pencil" />
+                            </button>
+                        </div>
+                    </NavLink>}
+                </Popup>
+            </Marker>
+        );
+    });
 }
 
 export default TPAMarker;

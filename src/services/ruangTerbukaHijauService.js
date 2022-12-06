@@ -1,8 +1,7 @@
 import http from "./httpService";
 import config from "../config.json";
 
-const {apiUrl} = config;
-const apiEndpoint = apiUrl + "/ruangTerbukaHijau";
+const apiEndpoint = config.apiUrl + "/ruangTerbukaHijau";
 
 export function getAllRTH() {
     return http.get(apiEndpoint);
@@ -16,10 +15,10 @@ export function saveRTH(rth) {
     if (rth._id) {
         const data = {...rth};
         delete data._id;
-        return http.put(`${apiEndpoint}/${rth._id}`, data);
+        return http.put(`${apiEndpoint}/${rth._id}`, data, config.service);
     }
 
-    return http.post(apiEndpoint, rth);
+    return http.post(apiEndpoint, rth, config.service);
 }
 
 export function deleteRTH(id) {

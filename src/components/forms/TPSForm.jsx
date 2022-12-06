@@ -1,12 +1,11 @@
-import React from "react";
-import { getAllKecamatan } from "../../services/kecamatanService";
-import Breadcrumb from "../Breadcrumb";
-import Form from "./Form";
-import { NavLink, useParams, useNavigate, useLocation } from "react-router-dom";
 import Joi from "joi";
+import React from "react";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
+import { getAllKecamatan } from "../../services/kecamatanService";
 import { getTPS, saveTPS } from "../../services/tPSService";
-import Modal from "../Modal";
+import Breadcrumb from "../Breadcrumb";
 import Sidebar from "../Sidebar";
+import Form from "./Form";
 
 class TPSForm extends Form {
     state = {
@@ -14,7 +13,8 @@ class TPSForm extends Form {
             alamat: "",
             lat: "",
             lon: "",
-            kecamatanId: ""
+            kecamatanId: "",
+            foto: ""
         },
         errors: {},
         kecamatan: []
@@ -34,7 +34,8 @@ class TPSForm extends Form {
         }),
         kecamatanId: Joi.string().required().messages({
             "string.empty": "kecamatan tidak boleh kosong"
-        })
+        }),
+        foto: Joi.object()
     };
 
     async componentDidMount() {
@@ -114,11 +115,16 @@ class TPSForm extends Form {
                             <div className="col-12">
                                 <div className="card">
                                     <div className="card-body">
-                                        <form onSubmit={(e) => this.handleSubmit(e)} autoComplete="off">
+                                        <form 
+                                            onSubmit={(e) => this.handleSubmit(e)} 
+                                            autoComplete="off"
+                                            encType="multipart/form-data"
+                                        >
                                             {this.renderInput("lat", "Latitude", "number", true)}
                                             {this.renderInput("lon", "Longitude", "number")}
                                             {this.renderTextArea("alamat", "Alamat")}
                                             {this.renderSelection("kecamatanId", "Kecamatan", kecamatan, "_id", "nama", data["kecamatanId"])}
+                                            {this.renderFileInput("foto", "Foto (Landscape)")}
                                             {this.renderPrimaryButton("Simpan")}
                                             <div className="form-group btn">
                                                 <div className="col-sm-12 mt-4">

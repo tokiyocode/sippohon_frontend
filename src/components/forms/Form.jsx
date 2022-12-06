@@ -5,6 +5,7 @@ import Input from './inputs/Input';
 import Selection from './inputs/Selection';
 import TextArea from "./inputs/TextArea";
 import MultipleInputs from './inputs/MultipleInputs';
+import FileInput from "./inputs/FileInput";
 
 class Form extends Component {
     state = {
@@ -102,6 +103,24 @@ class Form extends Component {
         this.setState({[inputsContainerName]: inputs, data});
     }
 
+    handleFileInputChange = ({ name, files }) => {
+        const byteToMb = 1000000;
+        const imageSizeInMb = files[0].size / byteToMb;
+        const limitInMb = 2;
+        const errors = {...this.state.errors};
+        if (imageSizeInMb > limitInMb) {
+            errors[name] = `maksimal ukuran file ${limitInMb}mb`;
+        }
+        else {
+            delete errors[name];
+        }
+
+        const data = {...this.state.data};
+        data[name] = files[0];
+
+        this.setState({ data, errors });
+    }
+
     renderInput(name, label, type="text", autoFocus=false) {
         const {data, errors} = this.state;
         
@@ -156,11 +175,22 @@ class Form extends Component {
                              />;
     }
 
+    renderFileInput(name, label) {
+        const { errors } = this.state;
+
+        return <FileInput 
+                    name={name}
+                    label={label}
+                    onChange={this.handleFileInputChange}
+                    error={errors[name]}  />
+    }
+
     renderPrimaryButton(label) {
+        const isDisable = Object.keys(this.state.errors).length > 0;
         return (
             <div className="form-group btn">
                 <div className="col-sm-12 mt-4">
-                    <input disabled={this.validate()} type="submit" className="btn btn-success text-white" value={label} />
+                    <input disabled={isDisable} type="submit" className="btn btn-success text-white" value={label} />
                 </div>
             </div>
         );
